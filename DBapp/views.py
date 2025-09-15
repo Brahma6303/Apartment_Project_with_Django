@@ -117,6 +117,11 @@ class OwnerListView(ListView):
         base_results=base_results.exclude(address=None) # address != None
         return base_results
 
+class AddressListView(ListView):
+    template_name='flat/all_address.html'
+    model=Address
+    context_object_name='all_address'
+
 
 #model Forms
 def add_new_address(request):
