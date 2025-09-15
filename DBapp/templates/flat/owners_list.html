@@ -1,0 +1,7 @@
+<ul>
+    {% for owner in all_owners %}
+        <li>
+            {{owner.first_name}} - {{owner.last_name}} -{{owner.mobile}} - {{owner.email}} -{{owner.address}}
+        </li>
+    {% endfor %}
+</ul>

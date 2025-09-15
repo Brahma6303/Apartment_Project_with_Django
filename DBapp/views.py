@@ -1,0 +1,144 @@
+from django.shortcuts import render,HttpResponseRedirect
+from .models import Flat,Owner,Address
+from .forms import NewOwnerForm,NewAdreessModelForm
+from django.views import View
+from django.views.generic.base import TemplateView
+from django.views.generic import ListView
+# Create your views here.
+# #manual form validations 
+# def add_new_flat(request):
+#     if request.method=='POST':
+#         block_name=request.POST['block_name']
+#         flat_num=request.POST['flatnum']
+#         #Manual validations of forms
+#         if block_name!="" and flat_num!="":
+#             if not  block_name in ['A','B','C','D','F']:
+#                 return render(request,'flat/new_flat.html',{'error':True,'error_message':"Block Name should be A,B,C,D or F"})
+#             else:
+#                 Flat.objects.create(block_name=block_name,flat_num=flat_num,br_count=3,status=False)
+#                 return render(request,'flat/new_flat_sucess.html',{'blk_name':block_name,'flt_no':flat_num})
+#         if block_name == "":
+#             return render(request,'flat/new_flat.html',{'error':True,'error_message':"Please fill Block Name filed"})
+#         elif flat_num == "":
+#             return render(request,'flat/new_flat.html',{'error':True,'error_message':"Please fill Flat Number filed"})
+
+#     else:
+#         return render(request,'flat/new_flat.html',{'error':False,'error_message':""})
+
+#class based views -View
+class FlatView(View):
+    def get(self,request):
+        return render(request,'flat/new_flat.html',{'error':False,'error_message':""})
+    
+    
+    def post(self,request):
+        if request.method=='POST':
+         block_name=request.POST['block_name']
+        flat_num=request.POST['flatnum']
+        #Manual validations of forms
+        if block_name!="" and flat_num!="":
+            if not  block_name in ['A','B','C','D','F']:
+                return render(request,'flat/new_flat.html',{'error':True,'error_message':"Block Name should be A,B,C,D or F"})
+            else:
+                Flat.objects.create(block_name=block_name,flat_num=flat_num,br_count=3,status=False)
+                #return render(request,'flat/new_flat_sucess.html',{'blk_name':block_name,'flt_no':flat_num})
+                return HttpResponseRedirect('/flats/flat-sucess/' + block_name + '/'+ flat_num) #http://127.0.0.1:8000/flats/flat-sucess/
+                #/flats/flat-sucess/C/303
+               # http://127.0.0.1:8000/flats/flat-sucess/C/303
+        if block_name == "":
+            return render(request,'flat/new_flat.html',{'error':True,'error_message':"Please fill Block Name filed"})
+        elif flat_num == "":
+            return render(request,'flat/new_flat.html',{'error':True,'error_message':"Please fill Flat Number filed"})
+
+
+
+    
+#Django Forms
+def add_new_owner(request):
+    if request.method=='POST':
+        #recieve the value from the filled form
+        filled_form=NewOwnerForm(request.POST)
+        #create an entry in owner table
+        if filled_form.is_valid():
+            Owner.objects.create(first_name=request.POST['f_name'],last_name=request.POST['l_name'],mobile=request.POST['mobile'],email=request.POST['email'])
+            #send same sucess response to client
+            return render(request,'flat/new_owner_sucess.html',{'first_name':request.POST['f_name'],'last_name':request.POST['l_name']})
+        else:
+            empty_form=NewOwnerForm()
+            return render(request,'flat/new_owner.html',{'owner_form':empty_form})
+    else:
+        # send the some empty form(Not Html,should be Django Form) to client to create new owner
+        new_owner_form=NewOwnerForm()
+        return render(request,'flat/new_owner.html',{'owner_form':new_owner_form})
+    
+#class based views - TemplateView-Redircting Scenario
+class FlatSuccessView(TemplateView):
+    template_name='flat/new_flat_sucess.html'
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['blk_name']=kwargs['block_name']
+        context['flt_no']=kwargs['flat_num']
+        return context
+    
+
+#class based views -TemplateView or ListView -List of Flats
+class FlatListView(TemplateView):
+    template_name='flat/flat_list.html'
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['all_flats']=Flat.objects.all()
+
+        return context
+    
+#class based views -TemplateView or DetailView -Details of a Flat
+class FlatDetailView(TemplateView):
+    template_name='flat/flat_details.html'
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        #print(kwargs) #o/p:pk
+        pk=kwargs['pk']
+        res=Flat.objects.filter(id=pk)
+        if len(res)>0:
+            context['flat_info']=res[0]
+        else:
+            context['flat_info']='No Flat Found'
+        return context
+    
+
+# class based views -ListView -List of Owners
+class OwnerListView(ListView):
+    template_name='flat/owners_list.html'
+    model=Owner
+    context_object_name='all_owners'
+
+    def get_queryset(self):
+        base_results=super().get_queryset()
+        #base_result=base_results.filter(address=None)
+        base_results=base_results.exclude(address=None) # address != None
+        return base_results
+
+
+#model Forms
+def add_new_address(request):
+    if request.method=='POST':
+        filled_form=NewAdreessModelForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            return render(request,'flat/new_address_sucess.html')
+    else:
+        new_address_form=NewAdreessModelForm()
+        return render(request,'flat/new_address.html',{'address_form':new_address_form})
+    
+
+#update address in Model Forms
+def update_address(request,addr_id):
+    if request.method=='POST':
+        existing_address=Address.objects.get(id=addr_id)
+        filled_form=NewAdreessModelForm(request.POST,instance=existing_address)
+        if filled_form.is_valid():
+            filled_form.save()
+            return render(request,'flat/update_address_sucess.html')
+    else:
+        existing_address=Address.objects.get(id=addr_id)
+        model_form_for_existing_address=NewAdreessModelForm(instance=existing_address)
+        return render(request,'flat/update_address.html',{'my_form':model_form_for_existing_address})

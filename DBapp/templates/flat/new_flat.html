@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        {% if error == True %}
+            <h3 style="color:red;">{{error_message}}</h3>
+        {% endif %}
+        <label for="blockname">Block Name</label>
+        <input type="text" name="block_name" id="block_name"/><br><br>
+        <label for="flatnum">Flat Number</label>
+        <input type="text" name="flatnum" id="flatnum"/><br><br>
+        <button>Add Flat</button>
+    </form>
+    
+</body>
+</html>

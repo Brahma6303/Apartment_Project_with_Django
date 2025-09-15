@@ -1,0 +1,22 @@
+<form method="POST">
+    {% csrf_token %}
+    <!-- Method-1
+    {{owner_form.f_name.label_tag}}
+    {{owner_form.f_name}}<br><br>
+    {{owner_form.l_name.label_tag}}
+    {{owner_form.l_name}}<br><br>
+    {{owner_form.mobile.label_tag}}
+    {{owner_form.mobile}}<br><br>
+    {{owner_form.email.label_tag}}
+    {{owner_form.email}}<br><br>  -->
+    
+    <!-- Method-2 
+     {% for filed in owner_form %}
+        {{filed.label_tag}}
+        {{filed}}<br><br>
+     {% endfor %}
+-->
+     <!-- Method-3 -->
+      {{owner_form}}
+    <button>Add New Owner</button>
+</form>

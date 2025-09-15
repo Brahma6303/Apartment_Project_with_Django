@@ -1,0 +1,7 @@
+<ul>
+    {% for flat in all_flats %}
+         <li>
+            {{flat.block_name}} -{{flat.flat_num}} - {{flat.br_count}} -{{flat.status}} -{{flat.owner}}
+         </li>
+    {% endfor %}
+</ul>
