@@ -4,7 +4,7 @@ from .forms import NewOwnerForm,NewAdreessModelForm
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView,DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView,CreateView
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -25,6 +25,22 @@ from django.views.generic.edit import FormView
 
 #     else:
 #         return render(request,'flat/new_flat.html',{'error':False,'error_message':""})
+
+
+# class based views - CreateView creating new flat
+class FlatCreateView(CreateView):
+    model=Flat
+    fields='__all__'
+    template_name='flat/add_new_flat.html' # default form is (variable name)
+    success_url='/flats/flat_add_sucess/'
+
+class FlatAddSuccessView(TemplateView):
+    template_name='flat/flat_add_sucess.html'
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['msg']="New Flat Added Successfully"
+        return context
 
 #class based views -View
 class FlatView(View):

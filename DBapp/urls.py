@@ -6,6 +6,8 @@ urlpatterns = [
     
     #path('add/',views.add_new_flat), # function based views
     path('add/',views.FlatView.as_view()), # class based views
+    path('new/',views.FlatCreateView.as_view()), #class based view - CreateView
+    path('flat_add_sucess/',views.FlatAddSuccessView.as_view()),
     path('addowner/',views.add_new_owner),
     path('flat-sucess/<str:block_name>/<str:flat_num>',views.FlatSuccessView.as_view()),#dynamic html page Templateview(redircting scenario
     path('viewall/',views.FlatListView.as_view()), #TemplateView or ListView
