@@ -4,6 +4,7 @@ from .forms import NewOwnerForm,NewAdreessModelForm
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView,DetailView
+from django.views.generic.edit import FormView
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -136,6 +137,28 @@ def add_new_address(request):
     else:
         new_address_form=NewAdreessModelForm()
         return render(request,'flat/new_address.html',{'address_form':new_address_form})
+
+# class based view - FormView for creating new address
+class AddressFormView(FormView):
+    #Html form
+    #Django Form
+    #Model Form
+    form_class=NewAdreessModelForm
+    template_name='flat/add_address.html'  # default form is (variable name)
+    success_url='/flats/new-address-sucess/'
+
+    def form_valid(self,form):
+        form.save()
+        return super().form_valid(form)
+    
+class AddressSuccessView(TemplateView):
+    template_name='flat/address_sucess.html'
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['msg']="New Address Added Successfully"
+        return context
+    
     
 
 #update address in Model Forms

@@ -14,5 +14,7 @@ urlpatterns = [
     path('address/',views.AddressListView.as_view()),
     path('view/<int:pk>',views.FlatDetailView.as_view()), #TemplateView or DetailView
     path('addAddress/',views.add_new_address),
+    path('address/new/',views.AddressFormView.as_view()), #class based view - FormView for creating new address
+    path('new-address-sucess/',views.AddressSuccessView.as_view()), # TempalteView redircting to FormView
     path('updateAddress/<int:addr_id>/',views.update_address)
 ]
