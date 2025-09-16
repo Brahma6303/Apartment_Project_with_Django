@@ -3,7 +3,7 @@ from .models import Flat,Owner,Address
 from .forms import NewOwnerForm,NewAdreessModelForm
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView
+from django.views.generic import ListView,DetailView
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -122,6 +122,9 @@ class AddressListView(ListView):
     model=Address
     context_object_name='all_address'
 
+class OwnerDetailView(DetailView):
+    template_name='flat/owner_details.html'  # default object or owner (variable name)
+    model=Owner
 
 #model Forms
 def add_new_address(request):
