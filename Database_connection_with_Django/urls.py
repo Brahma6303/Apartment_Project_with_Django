@@ -24,4 +24,5 @@ urlpatterns = [
     path('owners/',include('DBapp.urls')),
     path('address/',include('DBapp.urls')),
     path('updateAddr/',include('DBapp.urls')),
+    path('meetings/',include('Meetings.urls')),
 ]
