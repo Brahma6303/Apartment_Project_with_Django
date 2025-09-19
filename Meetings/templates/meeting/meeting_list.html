@@ -1,0 +1,4 @@
+{% for meeting in mymeetings %}
+    {{meeting.title}} - {{meeting.duration}}
+    <a href="{{meeting.mom.url}}">Mom</a> <br><br>
+{% endfor %}

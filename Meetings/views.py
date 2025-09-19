@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from .forms import NewMeetingForm
 from .models import Meeting
+from django.views.generic import ListView
 # Create your views here.
 
 class NewMeetingView(View):
@@ -14,3 +15,10 @@ class NewMeetingView(View):
             new_meeting=Meeting(title=request.POST['title'],duration=request.POST['duration'],mom=request.FILES['mom'])
             new_meeting.save()
             return render(request,'meeting/meeting_sucess.html')
+        
+
+
+class MeetingListView(ListView):
+    model=Meeting
+    template_name="meeting/meeting_list.html"
+    context_object_name="mymeetings"
