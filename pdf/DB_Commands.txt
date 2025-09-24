@@ -1,0 +1,38 @@
+#flat_info - present in b68_myaptz
+
+#USE b68_myaptz;
+#ALTER TABLE flat_info ADD COLUMN TEST VARCHAR(10);
+
+#alter table flat_info add index demo_index(block_name, flat_num,....)
+
+
+#ALTER TABLE flat_info DROP INDEX demo_index;
+
+#CREATE TABLE flat_owner(ID INT NOT NULL, NAME VARCHAR(50) NOT NULL, email VARCHAR(50) NOT NULL, PRIMARY KEY(ID));
+
+#ALTER TABLE flat_info ADD COLUMN OWNER_ID INT NOT NULL;
+
+#ALTER TABLE flat_info ADD FOREIGN KEY  (OWNER_ID) REFERENCES flat_owner(ID);
+
+#ALTER TABLE flat_info DROP FOREIGN KEY flat_info_ibfk_1;
+
+#ALTER TABLE flat_owner ADD COLUMN flat_id VARCHAR(5);
+
+#ALTER TABLE flat_owner ADD FOREIGN KEY (flat_id) REFERENCES flat_info (flat_id);
+
+#ALTER TABLE flat_owner ADD CONSTRAINT flat_owner_map_key FOREIGN KEY (flat_id) REFERENCES flat_info(flat_id);
+
+#ALTER TABLE flat_owner DROP FOREIGN KEY flat_owner_map_key;
+
+
+
+#DML - Data Manipulation queries.
+
+SHOW DATABASES;
+
+
+
+
+
+
+
