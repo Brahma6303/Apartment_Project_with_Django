@@ -10,7 +10,8 @@ urlpatterns = [
     path('flat_add_sucess/',views.FlatAddSuccessView.as_view()),
     path('addowner/',views.add_new_owner),
     path('flat-sucess/<str:block_name>/<str:flat_num>',views.FlatSuccessView.as_view()),#dynamic html page Templateview(redircting scenario
-    path('viewall/',views.FlatListView.as_view()), #TemplateView or ListView
+    #path('viewall/',views.FlatListView.as_view()), #TemplateView or ListView
+    path('get/<str:flat_id>/',views.FlatListReactView.as_view()),#APIView
     path('owners/',views.OwnerListView.as_view()),# ListView the all owners
     path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
     path('address/',views.AddressListView.as_view()),

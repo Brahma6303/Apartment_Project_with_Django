@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',  # step-1 register the rest framwork
+    'corsheaders',   #  step-1 register the corsheader is part of rest framework
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware' # step-2 configure of rest framework
 ]
 
 ROOT_URLCONF = 'Database_connection_with_Django.urls'
@@ -136,6 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT=BASE_DIR
 MEDIA_URL='/all_files/'
 
+#sending email with Django
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
@@ -143,3 +147,8 @@ EMAIL_USE_TLS=True
 DEFAULT_FROM_EMAIL='My Python Trainer-Kanna Brahmaiah'
 EMAIL_HOST_USER='kannabrahmaiah1@gmail.com'
 EMAIL_HOST_PASSWORD='ldnt sqdz zjnf wngg'
+
+# step-3: configuartion rest framework
+
+REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.AllowAny']}
+CORS_ORIGIN_ALLOW_ALL=True

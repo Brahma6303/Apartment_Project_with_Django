@@ -5,6 +5,10 @@ from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormView,CreateView
+from rest_framework.views import APIView
+from .serializers import FlatSerializer
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -106,7 +110,40 @@ class FlatListView(TemplateView):
         context['all_flats']=Flat.objects.all()
 
         return context
+
+# class based views - APIView -List of Flats in JSON content
+class FlatListReactView(APIView):
     
+    def get(self,request,flat_id):
+        serialized_flat=FlatSerializer()
+        try:
+            some_flat=Flat.objects.get(id=flat_id)
+            serialized_flat=FlatSerializer(some_flat)
+            return Response(serialized_flat.data)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self,request,flat_id):
+        serialzed_flat=FlatSerializer(data=request.data)
+        if serialzed_flat.is_valid(raise_exception=True):
+            serialzed_flat.save()
+            return Response(serialzed_flat.data,status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialzed_flat.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def put(self,request,flat_id):
+        some_flat=Flat.objects.get(id=flat_id)
+        serialized_flat=FlatSerializer(some_flat,data=request.data)
+        if serialized_flat.is_valid():
+            serialized_flat.save()
+            return Response(serialized_flat.data,status=status.HTTP_200_OK)
+        else:
+            return Response(serialized_flat.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self,request,flat_id):
+        some_flat=Flat.objects.get(id=flat_id)
+        some_flat.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 #class based views -TemplateView or DetailView -Details of a Flat
 class FlatDetailView(TemplateView):
     template_name='flat/flat_details.html'
