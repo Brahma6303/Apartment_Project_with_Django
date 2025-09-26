@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormView,CreateView
 from rest_framework.views import APIView
-from .serializers import FlatSerializer,OwnerSerializer
+from .serializers import FlatSerializer,OwnerSerializer,AddressSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import mixins
@@ -188,6 +188,11 @@ class AddressListView(ListView):
     model=Address
     context_object_name='all_address'
 
+# Generic APIView for all addresses in JSON content
+class AddressReactListView(generics.ListCreateAPIView):
+    queryset=Address.objects.all()
+    serializer_class=AddressSerializer
+
 class OwnerDetailView(DetailView):
     template_name='flat/owner_details.html'  # default object or owner (variable name)
     model=Owner
@@ -197,13 +202,13 @@ class OwnerReactView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.De
     serializer_class=OwnerSerializer
     lookup_field='pk'
 
-    def get(self,request,*pargs,**kwargs):
+    def get(self,request,pk, *pargs,**kwargs):
         return self.retrieve(request,*pargs,**kwargs)
     
-    def put(self,request,*pargs,**kwargs):
+    def put(self,request,pk ,*pargs,**kwargs):
         return self.update(request,*pargs,**kwargs)
     
-    def delete(self,request,*pargs,**kwargs):
+    def delete(self,request,pk ,*pargs,**kwargs):
         return self.destroy(request,*pargs,**kwargs)
 #model Forms
 def add_new_address(request):
@@ -237,7 +242,10 @@ class AddressSuccessView(TemplateView):
         context['msg']="New Address Added Successfully"
         return context
     
-    
+class AddressDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset=Address.objects.all()
+    serializer_class=AddressSerializer
+    lookup_field='id'  
 
 #update address in Model Forms
 def update_address(request,addr_id):

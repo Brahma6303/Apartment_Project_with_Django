@@ -16,9 +16,10 @@ urlpatterns = [
     path('owners/',views.OwnerReactListView.as_view()),# Mixins the all owners in JSON content
     path('owners/<int:pk>/',views.OwnerReactView.as_view()),# Retrieve mixin the owner details in JSON content
     #path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
-    path('address/',views.AddressListView.as_view()),
+    #path('addresses/',views.AddressListView.as_view()),
     path('view/<int:pk>',views.FlatDetailView.as_view()), #TemplateView or DetailView
-    path('addAddress/',views.add_new_address),
+    path('addresses/',views.AddressReactListView.as_view()), # Generic APIView for all addresses in JSON content,
+    path('addresses/<int:id>/',views.AddressDetailView.as_view()), # Generic APIView for single address in JSON content
     path('address/new/',views.AddressFormView.as_view()), #class based view - FormView for creating new address
     path('new-address-sucess/',views.AddressSuccessView.as_view()), # TempalteView redircting to FormView
     path('updateAddress/<int:addr_id>/',views.update_address)
