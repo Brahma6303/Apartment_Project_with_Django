@@ -6,9 +6,11 @@ from django.views.generic.base import TemplateView
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormView,CreateView
 from rest_framework.views import APIView
-from .serializers import FlatSerializer
+from .serializers import FlatSerializer,OwnerSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -171,6 +173,16 @@ class OwnerListView(ListView):
         base_results=base_results.exclude(address=None) # address != None
         return base_results
 
+class OwnerReactListView(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
+    queryset=Owner.objects.all()
+    serializer_class=OwnerSerializer
+
+    def get(self,request,*pargs,**kwargs):
+        return self.list(request,*pargs,**kwargs)
+    
+    def post(self,request,*pargs,**kwargs):
+        return self.create(request,*pargs,**kwargs)
+
 class AddressListView(ListView):
     template_name='flat/all_address.html'
     model=Address
@@ -180,6 +192,19 @@ class OwnerDetailView(DetailView):
     template_name='flat/owner_details.html'  # default object or owner (variable name)
     model=Owner
 
+class OwnerReactView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin,generics.GenericAPIView):
+    queryset=Owner.objects.all()
+    serializer_class=OwnerSerializer
+    lookup_field='pk'
+
+    def get(self,request,*pargs,**kwargs):
+        return self.retrieve(request,*pargs,**kwargs)
+    
+    def put(self,request,*pargs,**kwargs):
+        return self.update(request,*pargs,**kwargs)
+    
+    def delete(self,request,*pargs,**kwargs):
+        return self.destroy(request,*pargs,**kwargs)
 #model Forms
 def add_new_address(request):
     if request.method=='POST':
