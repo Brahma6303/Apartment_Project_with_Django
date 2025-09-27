@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router=DefaultRouter()
-router.register('owners',views.OwnerViewsetView,basename='all_owners')
+#router.register('owners',views.OwnerViewsetView,basename='all_owners')
+router.register('owners',views.OwnerGenericViewsetView,basename='all_owners')
 
 
 urlpatterns = [
@@ -19,7 +20,7 @@ urlpatterns = [
    # path('owners/',views.OwnerListView.as_view()),# ListView the all owners
     #path('owners/',views.OwnerReactListView.as_view()),# Mixins the all owners in JSON content
     #path('owners/<int:pk>/',views.OwnerReactView.as_view()),# Retrieve mixin the owner details in JSON content
-    path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
+    #path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
     #path('addresses/',views.AddressListView.as_view()),
     path('view/<int:pk>',views.FlatDetailView.as_view()), #TemplateView or DetailView
     path('addresses/',views.AddressReactListView.as_view()), # Generic APIView for all addresses in JSON content,

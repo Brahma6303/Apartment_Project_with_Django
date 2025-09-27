@@ -245,6 +245,15 @@ class OwnerViewsetView(viewsets.ViewSet):
         some_owner=Owner.objects.get(id=pk)
         some_owner.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class OwnerGenericViewsetView(viewsets.GenericViewSet,
+                              mixins.ListModelMixin,
+                              mixins.CreateModelMixin,
+                              mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin,
+                              mixins.DestroyModelMixin):
+    queryset=Owner.objects.all()
+    serializer_class=OwnerSerializer
 #model Forms
 def add_new_address(request):
     if request.method=='POST':
