@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework import viewsets
 # Create your views here.
 # #manual form validations 
 # def add_new_flat(request):
@@ -197,19 +198,53 @@ class OwnerDetailView(DetailView):
     template_name='flat/owner_details.html'  # default object or owner (variable name)
     model=Owner
 
-class OwnerReactView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin,generics.GenericAPIView):
-    queryset=Owner.objects.all()
-    serializer_class=OwnerSerializer
-    lookup_field='pk'
+# class OwnerReactView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin,generics.GenericAPIView):
+#     queryset=Owner.objects.all()
+#     serializer_class=OwnerSerializer
+#     lookup_field='pk'
 
-    def get(self,request,pk, *pargs,**kwargs):
-        return self.retrieve(request,*pargs,**kwargs)
+#     def get(self,request,pk, *pargs,**kwargs):
+#         return self.retrieve(request,*pargs,**kwargs)
     
-    def put(self,request,pk ,*pargs,**kwargs):
-        return self.update(request,*pargs,**kwargs)
+#     def put(self,request,pk ,*pargs,**kwargs):
+#         return self.update(request,*pargs,**kwargs)
     
-    def delete(self,request,pk ,*pargs,**kwargs):
-        return self.destroy(request,*pargs,**kwargs)
+#     def delete(self,request,pk ,*pargs,**kwargs):
+#         return self.destroy(request,*pargs,**kwargs)
+
+#viewSet for Owner
+class OwnerViewsetView(viewsets.ViewSet):
+    def list(self,request):
+        owners=Owner.objects.all()
+        serialized_owner=OwnerSerializer(owners,many=True)
+        return Response(serialized_owner.data)
+    
+    def create(self,request):
+        serialized_owner=OwnerSerializer(data=request.data)
+        if serialized_owner.is_valid():
+            serialized_owner.save()
+            return Response(serialized_owner.data,status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialized_owner.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def retrieve(self,request,pk):
+        owner=Owner.objects.get(id=pk)
+        serialized_owner=OwnerSerializer(owner)
+        return Response(serialized_owner.data,status=status.HTTP_200_OK)
+    
+    def update(self,request,pk):
+        some_owner=Owner.objects.get(id=pk)
+        serialized_owner=OwnerSerializer(some_owner,data=request.data)
+        if serialized_owner.is_valid():
+            serialized_owner.save()
+            return Response(serialized_owner.data,status=status.HTTP_200_OK)
+        else:
+            return Response(serialized_owner.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def destroy(self,request,pk):
+        some_owner=Owner.objects.get(id=pk)
+        some_owner.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 #model Forms
 def add_new_address(request):
     if request.method=='POST':

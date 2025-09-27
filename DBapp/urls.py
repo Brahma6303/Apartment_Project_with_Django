@@ -1,6 +1,10 @@
-from django.urls import path
-
+from django.urls import path,include
+from rest_framework.routers import DefaultRouter
 from . import views
+
+router=DefaultRouter()
+router.register('owners',views.OwnerViewsetView,basename='all_owners')
+
 
 urlpatterns = [
     
@@ -13,14 +17,16 @@ urlpatterns = [
     #path('viewall/',views.FlatListView.as_view()), #TemplateView or ListView
     path('get/<str:flat_id>/',views.FlatListReactView.as_view()),#APIView
    # path('owners/',views.OwnerListView.as_view()),# ListView the all owners
-    path('owners/',views.OwnerReactListView.as_view()),# Mixins the all owners in JSON content
-    path('owners/<int:pk>/',views.OwnerReactView.as_view()),# Retrieve mixin the owner details in JSON content
-    #path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
+    #path('owners/',views.OwnerReactListView.as_view()),# Mixins the all owners in JSON content
+    #path('owners/<int:pk>/',views.OwnerReactView.as_view()),# Retrieve mixin the owner details in JSON content
+    path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
     #path('addresses/',views.AddressListView.as_view()),
     path('view/<int:pk>',views.FlatDetailView.as_view()), #TemplateView or DetailView
     path('addresses/',views.AddressReactListView.as_view()), # Generic APIView for all addresses in JSON content,
     path('addresses/<int:id>/',views.AddressDetailView.as_view()), # Generic APIView for single address in JSON content
     path('address/new/',views.AddressFormView.as_view()), #class based view - FormView for creating new address
     path('new-address-sucess/',views.AddressSuccessView.as_view()), # TempalteView redircting to FormView
-    path('updateAddress/<int:addr_id>/',views.update_address)
+    path('updateAddress/<int:addr_id>/',views.update_address),
+
+    path('',include(router.urls))
 ]
