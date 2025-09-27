@@ -254,6 +254,12 @@ class OwnerGenericViewsetView(viewsets.GenericViewSet,
                               mixins.DestroyModelMixin):
     queryset=Owner.objects.all()
     serializer_class=OwnerSerializer
+
+# ModelViewSet for Address
+class AddressModelViewsetView(viewsets.ModelViewSet):
+    queryset=Address.objects.all()
+    serializer_class=AddressSerializer
+    lookup_field='id'
 #model Forms
 def add_new_address(request):
     if request.method=='POST':

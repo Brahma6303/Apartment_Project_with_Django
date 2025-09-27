@@ -6,6 +6,8 @@ router=DefaultRouter()
 #router.register('owners',views.OwnerViewsetView,basename='all_owners')
 router.register('owners',views.OwnerGenericViewsetView,basename='all_owners')
 
+addr_router=DefaultRouter()
+addr_router.register('addresses',views.AddressModelViewsetView,basename='all_addresses')
 
 urlpatterns = [
     
@@ -23,11 +25,12 @@ urlpatterns = [
     #path('owners/<int:pk>',views.OwnerDetailView.as_view()),# DetailView the owner details
     #path('addresses/',views.AddressListView.as_view()),
     path('view/<int:pk>',views.FlatDetailView.as_view()), #TemplateView or DetailView
-    path('addresses/',views.AddressReactListView.as_view()), # Generic APIView for all addresses in JSON content,
-    path('addresses/<int:id>/',views.AddressDetailView.as_view()), # Generic APIView for single address in JSON content
+    #path('addresses/',views.AddressReactListView.as_view()), # Generic APIView for all addresses in JSON content,
+    #path('addresses/<int:id>/',views.AddressDetailView.as_view()), # Generic APIView for single address in JSON content
     path('address/new/',views.AddressFormView.as_view()), #class based view - FormView for creating new address
     path('new-address-sucess/',views.AddressSuccessView.as_view()), # TempalteView redircting to FormView
     path('updateAddress/<int:addr_id>/',views.update_address),
 
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path('',include(addr_router.urls)),
 ]
