@@ -1,6 +1,10 @@
 from django.db import models
 
-# Create your models here.
+# Create your models here
+
+
+
+
 
 class Address(models.Model):
     house_no=models.CharField(max_length=15)

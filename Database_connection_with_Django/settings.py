@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
     'DBapp',
     'Meetings',
     'django.contrib.admin',
@@ -152,3 +153,6 @@ EMAIL_HOST_PASSWORD='ldnt sqdz zjnf wngg'
 
 REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.AllowAny']}
 CORS_ORIGIN_ALLOW_ALL=True
+
+#AUTH_USER_MODEL= django.contrib.auth.User(defalutl user model)
+AUTH_USER_MODEL='users.CustomUser'  # custom user model
